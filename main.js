@@ -12,13 +12,13 @@
         return +new Date();
     }
 
-    function buatTodoObject(id, task, task2, task3, timestamp, isCompleted) {
+    function buatTodoObject(id, task, task2, task3, /* timestamp ,*/ isCompleted) {
         return {
             id,
             task,
             task2,
             task3,
-            timestamp,
+            /* timestamp, */
             isCompleted
         };
     }
@@ -70,7 +70,7 @@
     }
 
     function makeTodo(todoObject) {
-        const {id, task, task2, task3, timestamp, isCompleted} = todoObject;
+        const {id, task, task2, task3, /* timestamp ,*/ isCompleted} = todoObject;
 
         const textTitle = document.createElement('h2');
         textTitle.innerText = task;
@@ -85,12 +85,14 @@
 
         // --------------
 
+        /*
         const textTimestamp = document.createElement('p');
         textTimestamp.innerText = timestamp;
+        */
 
         const textContainer = document.createElement('div');
         textContainer.classList.add('inner');
-        textContainer.append(textTitle, textTitle2, textTitle3, textTimestamp);
+        textContainer.append(textTitle, textTitle2, textTitle3, /* textTimestamp */);
 
         const container = document.createElement('div');
         container.classList.add('item', 'shadow');
@@ -130,10 +132,10 @@
         const textTodo = document.getElementById('bookFormTitle').value;
         const textTodoaut = document.getElementById('bookFormAuthor').value;
         const textTodoyear = document.getElementById('bookFormYear').value;
-        const timestamp = document.getElementById('date').value;
+        // const timestamp = document.getElementById('date').value;
 
         const generatedID = buatId();
-        const todoObject = buatTodoObject(generatedID, textTodo, textTodoaut, textTodoyear, timestamp, false );
+        const todoObject = buatTodoObject(generatedID, textTodo, textTodoaut, textTodoyear, /* timestamp, */ false );
         incompleteBookList.push(todoObject);
 
         document.dispatchEvent(new Event(FRESH_EVENT));
