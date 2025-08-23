@@ -3,7 +3,7 @@
 
 
     
-    const todos = [];
+    const incompleteBookList = [];
     const FRESH_EVENT = 'render-todo';
     const SIMPAN_EVENT = 'simpan-todo';
     const KEY_SIMPAN = 'APP_PERPUS';
@@ -12,17 +12,19 @@
         return +new Date();
     }
 
-    function buatTodoObject(id, task, timestamp, isCompleted) {
+    function buatTodoObject(id, task, task2, task3, timestamp, isCompleted) {
         return {
             id,
             task,
+            task2,
+            task3,
             timestamp,
             isCompleted
         };
     }
 
     function findTodo(todoId) {
-        for (const todoItem of todos) {
+        for (const todoItem of incompleteBookList) {
             if (todoItem.id === todoId) {
                 return todoItem;
             }
@@ -31,8 +33,8 @@
     }
 
     function findTodoIndex(todoId) {
-        for (const index in todos) {
-            if (todos [index].id === todoId) {
+        for (const index in incompleteBookList) {
+            if (incompleteBookList [index].id === todoId) {
                 return index;
             }
         }
@@ -49,9 +51,9 @@
 
     function saveData() {
         if (isStorageExist()) {
-            const parsed = JSON.stringify(todos);
+            const parsed = JSON.stringify(incompleteBookList);
             localStorage.setItem(KEY_SIMPAN, parsed);
-            document.dispatchEvent(new Event(SAVED_EVENT));
+            document.dispatchEvent(new Event(SIMPAN_EVENT));
         }
     }
 
@@ -61,24 +63,34 @@
 
         if (data !== null) {
             for (const todo of data) {
-                todos.push(todo);
+                incompleteBookList.push(todo);
             }
         }
         document.dispatchEvent(new Event(FRESH_EVENT));
     }
 
     function makeTodo(todoObject) {
-        const {id, task, timestamp,isCompleted} = todoObject;
+        const {id, task, task2, task3, timestamp, isCompleted} = todoObject;
 
         const textTitle = document.createElement('h2');
         textTitle.innerText = task;
+
+        // --------------
+
+        const textTitle2 = document.createElement('h2');
+        textTitle.innerText = task2;
+
+        const textTitle3 = document.createElement('h2');
+        textTitle.innerText = task3;
+
+        // --------------
 
         const textTimestamp = document.createElement('p');
         textTimestamp.innerText = timestamp;
 
         const textContainer = document.createElement('div');
         textContainer.classList.add('inner');
-        textContainer.append(textTitle, textTimestamp);
+        textContainer.append(textTitle, textTitle2, textTitle3, textTimestamp);
 
         const container = document.createElement('div');
         container.classList.add('item', 'shadow');
@@ -122,7 +134,7 @@
 
         const generatedID = buatId();
         const todoObject = buatTodoObject(generatedID, textTodo, textTodoaut, textTodoyear, timestamp, false );
-        todos.push(todoObject);
+        incompleteBookList.push(todoObject);
 
         document.dispatchEvent(new Event(FRESH_EVENT));
         saveData();
@@ -143,7 +155,7 @@
 
         if (todoTarget === -1) return;
 
-        todos.splice(todoTarget, 1);
+        incompleteBookList.splice(todoTarget, 1);
         document.dispatchEvent(new Event(FRESH_EVENT));
         saveData();
     }
@@ -162,7 +174,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
 
-        const submitForm = document.getElementById('form');
+        const submitForm = document.getElementById('bookForm');
 
         submitForm.addEventListener('bookFormSubmit', function (event) {
             event.preventDefault();
@@ -174,18 +186,18 @@
         }
     });
 
-    document.addEventListener(SAVED_EVENT, function () {
+    document.addEventListener(SIMPAN_EVENT, function () {
         console.log('Data berhasil disimpan');
     });
 
     document.addEventListener(FRESH_EVENT, function () {
-        const uncompletedTODOList = document.getElementById('todos');
-        const listCompleted = document.getElementById('completed-todos');
+        const uncompletedTODOList = document.getElementById('incompleteBookList');
+        const listCompleted = document.getElementById('completeBookList');
 
         uncompletedTODOList.innerHTML = '';
         listCompleted.innerHTML = '';
 
-        for (const todoItem of todos) {
+        for (const todoItem of incompleteBookList) {
             const todoElement = makeTodo(todoItem);
             if (todoItem.isCompleted) {
                 listCompleted.append(todoElement);
