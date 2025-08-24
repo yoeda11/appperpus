@@ -12,14 +12,14 @@ function buatId() {
 return +new Date();
 }
 
-function buatTodoObject(id, task, task2, task3, /* timestamp ,*/ isCompleted) {
+function buatTodoObject(id, task, task2, task3, /* timestamp ,*/ isComplete) {
     return {
         id,
         task,
         task2,
         task3,
         /* timestamp, */
-        isCompleted
+        isComplete
     };
 }
 
@@ -70,22 +70,25 @@ function loadDataFromStorage() {
 }
 
 function makeTodo(todoObject) {
-    const {id, task, task2, task3, /* timestamp ,*/ isCompleted} = todoObject;
+    const {id, task, task2, task3, /* timestamp ,*/ isComplete} = todoObject;
 
-    const textTitle = document.createElement('h2');
+    const textTitle = document.createElement('h3');
     textTitle.innerText = task;
-    textTitle.classList.add('bookItemTitle');
+    textTitle.dataset.testid = 'bookItemTitle';
+    // textTitle.classList.add('bookItemTitle');
 
     // --------------
 
     const textTitle2 = document.createElement('p');
     textTitle2.innerText = task2;
-    textTitle2.classList.add('bookItemAuthor');
+    textTitle2.dataset.testid = 'bookItemAuthor';
+    // textTitle2.classList.add('bookItemAuthor');
 
 
     const textTitle3 = document.createElement('p');
     textTitle3.innerText = task3;
-    textTitle3.classList.add('bookItemYear');
+    textTitle3.dataset.testid = 'bookItemYear';
+    // textTitle3.classList.add('bookItemYear');
 
     // --------------
 
@@ -95,7 +98,8 @@ function makeTodo(todoObject) {
     */
 
     const textContainer = document.createElement('div');
-    textContainer.classList.add('inner');
+    textContainer.dataset.testid = 'bookItem';
+    // textContainer.classList.add('inner');
     textContainer.append(textTitle, textTitle2, textTitle3, /* textTimestamp */);
 
     const container = document.createElement('div');
@@ -103,7 +107,7 @@ function makeTodo(todoObject) {
     container.append(textContainer); // yang diganti
     container.setAttribute('id', `todo-${id}`)
 
-    if (isCompleted) {
+    if (isComplete) {
 
         const undoButton = document.createElement('button');
         undoButton.innerText = 'Belum selesai dibaca';
@@ -116,7 +120,8 @@ function makeTodo(todoObject) {
         // tambahan
         const trashButton = document.createElement('button');
         trashButton.innerText = 'Hapus Buku';
-        trashButton.classList.add('trash-button');
+        trashButton.dataset.testid = 'bookItemDeleteButton';
+        // trashButton.classList.add('trash-button');
         trashButton.addEventListener('click', function () {
             removeTaskFromCompleted(id);
         });
@@ -125,14 +130,16 @@ function makeTodo(todoObject) {
     } else {
         const checkButton = document.createElement('button');
         checkButton.innerText = 'Selesai dibaca';
-        checkButton.classList.add('check-button');
+        checkButton.dataset.testid = 'bookItemIsCompleteButton';
+        // checkButton.classList.add('check-button');
         checkButton.addEventListener('click', function () {
             addTaskToCompleted(id);
         });
 
         const trashButton1 = document.createElement('button');
         trashButton1.innerText = 'Hapus Buku';
-        trashButton1.classList.add('trash-button');
+        trashButton1.dataset.testid = 'bookItemDeleteButton';
+        // trashButton1.classList.add('trash-button');
         trashButton1.addEventListener('click', function () {
             removeTaskFromCompleted(id);
         });
@@ -147,10 +154,11 @@ function addTodo() {
     const textTodo = document.getElementById('bookFormTitle').value;
     const textTodoaut = document.getElementById('bookFormAuthor').value;
     const textTodoyear = document.getElementById('bookFormYear').value;
+    const textTodoyearnum = Number(textTodoyear);
     // const timestamp = document.getElementById('date').value;
 
     const generatedID = buatId();
-    const todoObject = buatTodoObject(generatedID, textTodo, textTodoaut, textTodoyear, /* timestamp, */ false );
+    const todoObject = buatTodoObject(generatedID, textTodo, textTodoaut, textTodoyearnum, /* timestamp, */ false );
     incompleteBookList.push(todoObject);
 
     document.dispatchEvent(new Event(FRESH_EVENT));
@@ -162,7 +170,7 @@ function addTaskToCompleted(todoId) {
 
     if (todoTarget == null) return;
 
-    todoTarget.isCompleted = true;
+    todoTarget.isComplete = true;
     document.dispatchEvent(new Event(FRESH_EVENT));
     saveData();
 }
@@ -182,7 +190,7 @@ function undoTaskFromCompleted(todoId) {
     const todoTarget = findTodo(todoId);
     if (todoTarget == null) return;
 
-    todoTarget.isCompleted = false;
+    todoTarget.isComplete = false;
     document.dispatchEvent(new Event(FRESH_EVENT));
 
     //todoTarget.isCompleted(new Event(FRESH_EVENT));
@@ -216,7 +224,7 @@ document.addEventListener(FRESH_EVENT, function () {
 
     for (const todoItem of incompleteBookList) {
         const todoElement = makeTodo(todoItem);
-        if (todoItem.isCompleted) {
+        if (todoItem.isComplete) {
             listCompleted.append(todoElement);
         } else {
             uncompletedTODOList.append(todoElement);
