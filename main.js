@@ -74,14 +74,18 @@ function makeTodo(todoObject) {
 
     const textTitle = document.createElement('h2');
     textTitle.innerText = task;
+    textTitle.classList.add('bookItemTitle');
 
     // --------------
 
     const textTitle2 = document.createElement('p');
     textTitle2.innerText = task2;
+    textTitle2.classList.add('bookItemAuthor');
+
 
     const textTitle3 = document.createElement('p');
     textTitle3.innerText = task3;
+    textTitle3.classList.add('bookItemYear');
 
     // --------------
 
@@ -103,6 +107,7 @@ function makeTodo(todoObject) {
 
         const undoButton = document.createElement('button');
         undoButton.innerText = 'Belum selesai dibaca';
+        
         undoButton.classList.add('undo-button');
         undoButton.addEventListener('click', function () {
             undoTaskFromCompleted(id);
@@ -125,7 +130,14 @@ function makeTodo(todoObject) {
             addTaskToCompleted(id);
         });
 
-        container.append(checkButton);
+        const trashButton1 = document.createElement('button');
+        trashButton1.innerText = 'Hapus Buku';
+        trashButton1.classList.add('trash-button');
+        trashButton1.addEventListener('click', function () {
+            removeTaskFromCompleted(id);
+        });
+
+        container.append(checkButton, trashButton1);
     }
 
     return container;
