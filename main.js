@@ -12,15 +12,14 @@ function buatId() {
 return +new Date();
 }
 
-function buatTodoObject(id, task, task2, task3, /* timestamp ,*/ isComplete) {
+function buatTodoObject(id, title, author, year, isComplete) {
     return {
         id,
-        task,
-        task2,
-        task3,
-        /* timestamp, */
+        title,
+        author,
+        year,
         isComplete
-    };
+    }
 }
 
 function findTodo(todoId) {
@@ -70,23 +69,23 @@ function loadDataFromStorage() {
 }
 
 function makeTodo(todoObject) {
-    const {id, task, task2, task3, /* timestamp ,*/ isComplete} = todoObject;
+    const {id, title, author, year, /* timestamp ,*/ isComplete} = todoObject;
 
     const textTitle = document.createElement('h3');
-    textTitle.innerText = task;
+    textTitle.innerText = title;
     textTitle.dataset.testid = 'bookItemTitle';
     // textTitle.classList.add('bookItemTitle');
 
     // --------------
 
     const textTitle2 = document.createElement('p');
-    textTitle2.innerText = task2;
+    textTitle2.innerText = author;
     textTitle2.dataset.testid = 'bookItemAuthor';
     // textTitle2.classList.add('bookItemAuthor');
 
 
     const textTitle3 = document.createElement('p');
-    textTitle3.innerText = task3;
+    textTitle3.innerText = year;
     textTitle3.dataset.testid = 'bookItemYear';
     // textTitle3.classList.add('bookItemYear');
 
@@ -99,6 +98,7 @@ function makeTodo(todoObject) {
 
     const textContainer = document.createElement('div');
     textContainer.dataset.testid = 'bookItem';
+    textContainer.dataset.bookid = id;
     // textContainer.classList.add('inner');
     textContainer.append(textTitle, textTitle2, textTitle3, /* textTimestamp */);
 
